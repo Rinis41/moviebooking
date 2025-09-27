@@ -69,6 +69,7 @@ $stmt->close();
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>
+        <button onclick="window.history.back();">Go Back</button>
     </div>
 </body>
 </html>

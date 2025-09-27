@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$db   = 'auth_demo';
+$db   = 'moviebooking';
 $user = 'root';
 $pass = '';
 $dsn  = "mysql:host=$host;dbname=$db;charset=utf8mb4";
@@ -13,7 +13,6 @@ $options = [
 try {
     $pdo = new PDO($dsn, $user, $pass, $options);
 } catch (PDOException $e) {
-    // In production, log error instead of echo
     die("Database connection failed: " . $e->getMessage());
 }
 ?>

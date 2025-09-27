@@ -4,7 +4,6 @@ session_start();
 
 $username = $_SESSION['username'] ?? null;
 
-// Fetch movies from database
 $stmt = $pdo->query("SELECT title, img, genres, imdb FROM movies ORDER BY id DESC");
 $trending = $stmt->fetchAll();
 
@@ -13,7 +12,6 @@ function render_movie_card($m) {
     $img = htmlspecialchars($m['img']);
     $imdb = htmlspecialchars($m['imdb'] ?? '');
     $tags = '';
-    // Handle genres as comma separated string
     $genres = is_array($m['genres']) ? $m['genres'] : explode(',', $m['genres']);
     foreach ($genres as $g) {
         $tags .= "<span class=\"genre-tag\">".htmlspecialchars(trim($g))."</span>";
@@ -52,7 +50,6 @@ HTML;
         .genre-tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;padding-bottom:6px}
         .genre-tag{background:#232733;color:#ffb400;border-radius:6px;padding:2px 8px;font-size:0.8rem}
         .imdb-rating{background:#ffe082;border-radius:6px;padding:4px 8px;color:#181c24;font-weight:700;text-align:center;margin:6px auto 12px;width:70px}
-        /* simple controls */
         .slider-wrap{display:flex;align-items:center;gap:12px;padding-left:40px}
         button.ctrl{background:#fff;border:1px solid #ddd;padding:6px 8px;border-radius:6px;cursor:pointer}
         @media(max-width:900px){.hero{flex-direction:column;text-align:center}.hero-img{margin:0 0 18px}}

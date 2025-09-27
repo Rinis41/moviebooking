@@ -1,25 +1,21 @@
 <?php
 session_start();
 require_once 'db.php';
-
-// Movie posters mapping
 $movie_posters = [
     'Interstellar' => 'images/interstellar.png',
     'Fight Club' => 'images/fightclub.png',
     'Oppenheimer' => 'images/oppenheimer.jpg',
     'Godzilla Minus One' => 'images/godzilla.png',
     'Scarface' => 'images/scarface.png',
-    'Echoes of the Cosmos' => 'images/interstellar.png', // fallback or custom
+    'Echoes of the Cosmos' => 'images/interstellar.png'
 ];
 $movie_title = isset($_GET['movie']) ? htmlspecialchars($_GET['movie']) : '';
 $showtime = isset($_GET['showtime']) ? htmlspecialchars($_GET['showtime']) : '';
 $poster = isset($movie_posters[$movie_title]) ? $movie_posters[$movie_title] : 'images/interstellar.png';
-
 $user_id = $_SESSION['user_id'] ?? null;
 $movie = $_GET['movie'] ?? '';
 $showtime = $_GET['showtime'] ?? '';
 if ($user_id && $movie && $showtime) {
-    // Check if ticket already exists for this user/movie/showtime
     $stmt = $conn->prepare('SELECT id FROM tickets WHERE user_id = ? AND movie = ? AND showtime = ?');
     $stmt->bind_param('iss', $user_id, $movie, $showtime);
     $stmt->execute();

@@ -1,27 +1,21 @@
 <?php
 require 'pdo.php';
 session_start();
-
-// Handle create / update / delete actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
-
     if ($action === 'create') {
         $title = trim($_POST['title'] ?? '');
         $img   = trim($_POST['img'] ?? 'images/placeholder.png');
         $genres= trim($_POST['genres'] ?? '');
-
         if ($title !== '') {
             $stmt = $pdo->prepare("INSERT INTO movies (title, img, genres) VALUES (?, ?, ?)");
             $stmt->execute([$title, $img, $genres]);
         }
     }
-
     if ($action === 'delete' && isset($_POST['id'])) {
         $stmt = $pdo->prepare("DELETE FROM movies WHERE id = ?");
         $stmt->execute([ (int)$_POST['id'] ]);
     }
-
     if ($action === 'update' && isset($_POST['id'])) {
         $id    = (int)$_POST['id'];
         $title = trim($_POST['title'] ?? '');
@@ -32,12 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $stmt->execute([$title, $img, $genres, $id]);
         }
     }
-
     header("Location: dashboard.php");
     exit;
 }
-
-// If editing, fetch single movie for the edit form
 $editMovie = null;
 if (isset($_GET['edit'])) {
     $id = (int) $_GET['edit'];
@@ -45,8 +36,6 @@ if (isset($_GET['edit'])) {
     $stmt->execute([$id]);
     $editMovie = $stmt->fetch();
 }
-
-// Fetch all movies
 $stmt = $pdo->query("SELECT id, title, img, genres FROM movies ORDER BY id DESC");
 $movies = $stmt->fetchAll();
 ?>
@@ -74,9 +63,7 @@ $movies = $stmt->fetchAll();
     <a href="index.php" style="display:inline-block;margin-bottom:16px;">
         <button type="button">&larr; Back to Home</button>
     </a>
-
     <h2>Dashboard — Movies</h2>
-
     <?php if ($editMovie): ?>
         <h3>Edit Movie</h3>
         <form method="post" class="card" style="align-items:flex-start;flex-direction:column;">
@@ -113,7 +100,6 @@ $movies = $stmt->fetchAll();
             <button type="submit">Add</button>
         </form>
     <?php endif; ?>
-
     <h3>Movies</h3>
     <?php if (empty($movies)): ?>
         <p class="small">No movies yet.</p>

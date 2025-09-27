@@ -28,7 +28,6 @@ $poster = isset($movie_posters[$movie_title]) ? $movie_posters[$movie_title] : '
 $description = isset($movie_descriptions[$movie_title]) ? $movie_descriptions[$movie_title] : $movie_descriptions['Echoes of the Cosmos'];
 $cast = isset($movie_cast[$movie_title]) ? $movie_cast[$movie_title] : $movie_cast['Echoes of the Cosmos'];
 
-// Movie data (replace with dynamic PHP if needed)
 $movie = [
     'title' => $movie_title,
     'rating' => 4.7,
