@@ -11,8 +11,8 @@ $movie_posters = [
     'Scarface' => 'images/scarface.png',
     'Echoes of the Cosmos' => 'images/interstellar.png', // fallback or custom
 ];
-$movie_title = isset($_GET['movie']) ? htmlspecialchars($_GET['movie']) : 'Echoes of the Cosmos';
-$showtime = isset($_GET['showtime']) ? htmlspecialchars($_GET['showtime']) : 'Today, 7:30 PM (Screen 5)';
+$movie_title = isset($_GET['movie']) ? htmlspecialchars($_GET['movie']) : '';
+$showtime = isset($_GET['showtime']) ? htmlspecialchars($_GET['showtime']) : '';
 $poster = isset($movie_posters[$movie_title]) ? $movie_posters[$movie_title] : 'images/interstellar.png';
 
 $user_id = $_SESSION['user_id'] ?? null;
@@ -224,8 +224,13 @@ if ($user_id && $movie && $showtime) {
     </div>
     <div class="container">
         <div class="confirm-section">
-            <h1>Booking Confirmed!</h1>
-            <p>Your tickets for <strong><?= $movie_title ?></strong> are secured. Enjoy the show!</p>
+            <?php if ($showtime): ?>
+                <h1>Booking Confirmed!</h1>
+                <p>Your tickets for <strong><?= $movie_title ?></strong> are secured. Enjoy the show!</p>
+            <?php else: ?>
+                <h1 style="color:red">Booking Not Complete</h1>
+                <p>Please go back and select a showtime to complete your booking for <strong><?= $movie_title ?></strong>.</p>
+            <?php endif; ?>
             <img src="images/Booking Confirmation.png" alt="E-Ticket QR" class="qr-img">
         </div>
         <div class="details-section">
@@ -234,16 +239,20 @@ if ($user_id && $movie && $showtime) {
                 <ul>
                     <li><strong>Movie Name:</strong> <?= $movie_title ?></li>
                     <li><strong>Cinema:</strong> MovieBook Grand Plaza - Hall 3</li>
-                    <li><strong>Showtime:</strong> <?= $showtime ?></li>
-                    <li><strong>Seats:</strong> A1, A2, A3</li>
-                    <li><strong>Total Paid:</strong> $36.00</li>
+                    <li><strong>Showtime:</strong> <?= $showtime ? $showtime : '<span style="color:red">No showtime selected</span>' ?></li>
+                    <?php if ($showtime): ?>
+                        <li><strong>Seats:</strong> A1, A2, A3</li>
+                        <li><strong>Total Paid:</strong> $36.00</li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>
         <div class="actions">
-            <button>Download E-Ticket</button>
-            <button>Add to Calendar</button>
-            <button>Share Booking</button>
+            <?php if ($showtime): ?>
+                <button>Download E-Ticket</button>
+                <button>Add to Calendar</button>
+                <button>Share Booking</button>
+            <?php endif; ?>
         </div>
     </div>
     <div class="footer">

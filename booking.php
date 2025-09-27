@@ -141,20 +141,28 @@ $selected_date = $_GET['date'] ?? 'Today';
                     <a href="?movie=<?= urlencode($movie['title']) ?>&date=<?= urlencode($d) ?>" class="date-tab<?= ($selected_date==$d)?' selected':'' ?>"><?= htmlspecialchars($d) ?></a>
                 <?php endforeach; ?>
             </div>
-            <div class="showtime-btns">
-                <?php foreach ($showtimes[$selected_date] as [$time, $active]): ?>
-                    <?php if ($active): ?>
-                        <a href="confirmation.php?movie=<?= urlencode($movie['title']) ?>&showtime=<?= urlencode($selected_date . ', ' . $time) ?>">
-                            <button class="showtime-btn"><?= htmlspecialchars($time) ?></button>
-                        </a>
-                    <?php else: ?>
-                        <button class="showtime-btn inactive" disabled><?= htmlspecialchars($time) ?></button>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            </div>
-        </div>
-        <div class="actions">
-            <a href="confirmation.php"><button class="confirm-btn">Confirm Ticket</button></a>
+            <form method="get" action="confirmation.php">
+                <input type="hidden" name="movie" value="<?= htmlspecialchars($movie['title']) ?>">
+                <input type="hidden" name="date" value="<?= htmlspecialchars($selected_date) ?>">
+                <div class="showtime-btns">
+                    <?php foreach ($showtimes[$selected_date] as [$time, $active]): ?>
+                        <?php if ($active): ?>
+                            <label style="margin-right:16px;">
+                                <input type="radio" name="showtime" value="<?= htmlspecialchars($time) ?>">
+                                <span class="showtime-btn" style="display:inline-block; padding:12px 24px; border:1px solid #e2e2e2; border-radius:8px; background:#f7f8fa; color:#222e3a; font-size:1rem; font-weight:500; cursor:pointer; margin-bottom:10px;"><?= htmlspecialchars($time) ?></span>
+                            </label>
+                        <?php else: ?>
+                            <span class="showtime-btn inactive" style="display:inline-block; padding:12px 24px; border:1px solid #e2e2e2; border-radius:8px; background:#f0f0f0; color:#aaa; font-size:1rem; font-weight:500; opacity:0.7; margin-bottom:10px;"><?= htmlspecialchars($time) ?></span>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="actions">
+                    <button type="submit" class="confirm-btn">Confirm Ticket</button>
+                </div>
+            </form>
+            <?php if (isset($_GET['showtime']) && $_GET['showtime'] == ''): ?>
+                <div style="color:red; text-align:center; margin-top:10px;">Please select a showtime.</div>
+            <?php endif; ?>
         </div>
     </div>
     <div class="footer">
